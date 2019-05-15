@@ -1,5 +1,3 @@
-import sbtrelease.ReleaseStateTransformations._
-
 name := "sbt-jasperreports"
 
 organization := "com.jeduardocosta.jasperreports"
@@ -13,19 +11,11 @@ scalaVersion := "2.12.8"
 
 sbtPlugin := true
 
-crossSbtVersions := Seq("0.13.17", "1.1.6")
-
-publishTo := {
-  val isSnapshotValue = isSnapshot.value
-  val nexus = "https://oss.sonatype.org/"
-  if (isSnapshotValue) Some("snapshots" at nexus + "content/repositories/snapshots")
-  else Some("releases" at nexus + "service/local/staging/deploy/maven2")
-}
+crossSbtVersions := Seq("0.13.18", "1.2.8")
 
 publishMavenStyle := true
 
 publishArtifact in Test := false
-
 parallelExecution in Test := false
 
 sbtrelease.ReleasePlugin.autoImport.releasePublishArtifactsAction := PgpKeys.publishSigned.value
@@ -39,6 +29,7 @@ libraryDependencies := Seq(
     "org.scalatest" %% "scalatest" % "3.0.1" % "test",
 )
 
+import ReleaseTransformations._
 releaseProcess := Seq[ReleaseStep](
   checkSnapshotDependencies,
   inquireVersions,
@@ -47,18 +38,19 @@ releaseProcess := Seq[ReleaseStep](
   setReleaseVersion,
   commitReleaseVersion,
   tagRelease,
-  releaseStepCommandAndRemaining("^publish"),
+  releaseStepCommandAndRemaining("^publishSigned"),
   setNextVersion,
   commitNextVersion,
   pushChanges
 )
 
-pgpSecretRing := file("/home/sam/Downloads/gpg.private")
+releaseCrossBuild := false
 
-pgpPublicRing := file("/home/sam/Downloads/gpg.public")
-
-pomIncludeRepository := {
-  _ => false
+publishTo := {
+  if (isSnapshot.value)
+    Some("snapshots" at "https://oss.sonatype.org/content/repositories/snapshots")
+  else
+    Some("releases" at "https://oss.sonatype.org/service/local/staging/deploy/maven2")
 }
 
 pomExtra := {
