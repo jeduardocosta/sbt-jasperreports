@@ -1,27 +1,18 @@
-package com.jeduardocosta.jasperreports.sbt
+package jasperreports
 
 import java.io.File
 
 import net.sf.jasperreports.engine.JasperCompileManager
-import sbt.{Def, _}
 import sbt.Keys._
+import sbt.{Def, _}
 
 import scala.util.{Failure, Success, Try}
 
-class SbtPlugin extends AutoPlugin {
+class JasperReportsSbtPlugin extends AutoPlugin {
   val GroupId = "com.jeduardocosta.jasperreports"
   val ArtifactId = "scalac-jasperreports-plugin"
 
-  object autoImport {
-    val jasperReportsInstance = taskKey[JasperReports]("Holds instance of JasperReports")
-
-    lazy val jasperReportsCompile = taskKey[Unit]("Generates jasper files using jrxml files")
-    lazy val jasperReportsCleanOutputFiles = taskKey[Unit]("Cleans jasper files")
-
-    lazy val jasperReportsInputPath = settingKey[String]("Directory where jrxml files will be read")
-    lazy val jasperReportsOutputPath = settingKey[String]("Directory where jasper files will be written")
-  }
-
+  val autoImport: JasperReportsKeys.type = JasperReportsKeys
   import autoImport._
 
   override def trigger = allRequirements

@@ -35,7 +35,8 @@ resolvers ++= Seq("Jasper" at "http://jasperreports.sourceforge.net/maven2")
 
 libraryDependencies := Seq(
     "net.sf.jasperreports" % "jasperreports" % "6.8.0",
-    "com.lowagie" % "itext" % "2.1.7"
+    "com.lowagie" % "itext" % "2.1.7",
+    "org.scalatest" %% "scalatest" % "3.0.1" % "test",
 )
 
 releaseProcess := Seq[ReleaseStep](
